@@ -1,6 +1,8 @@
 from __future__ import print_function
 from collections import deque
+
 from rl.tabular_q_learner import QLearner
+from matplotlib import pyplot as plt
 import numpy as np
 import gym
 
@@ -20,10 +22,10 @@ num_actions = env.action_space.n
 
 q_learner = QLearner(state_dim, num_actions)
 
-MAX_EPISODES = 10000
+MAX_EPISODES = 100
 MAX_STEPS    = 200
 
-episode_history = deque(maxlen=100)
+episode_history = []
 for i_episode in range(MAX_EPISODES):
 
   # initialize
@@ -45,7 +47,7 @@ for i_episode in range(MAX_EPISODES):
                               np.digitize(pole_angle, pole_angle_bins),
                               np.digitize(cart_velocity, cart_velocity_bins),
                               np.digitize(angle_rate_of_change, angle_rate_bins)])
-    
+
 
     total_rewards += reward
     if done: reward = -200   # normalize reward
@@ -63,3 +65,7 @@ for i_episode in range(MAX_EPISODES):
   if mean_rewards >= 195.0:
     print("Environment {} solved after {} episodes".format(env_name, i_episode+1))
     break
+
+print(episode_history)
+plt.plot(episode_history, label="QL reward")
+plt.show()

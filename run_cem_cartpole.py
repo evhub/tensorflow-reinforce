@@ -1,5 +1,7 @@
 from __future__ import print_function
 from collections import deque
+
+from matplotlib import pyplot as plt
 import numpy as np
 import gym
 
@@ -23,7 +25,7 @@ def theta_rollout(env, theta, num_steps, render = False):
     if done: break
   return total_rewards, t
 
-MAX_EPISODES = 10000
+MAX_EPISODES = 100
 MAX_STEPS    = 200
 batch_size   = 25
 top_per      = 0.2 # percentage of theta with highest score selected from all the theta
@@ -33,7 +35,7 @@ std          = 1 # scale of standard deviation
 theta_mean = np.zeros(env.observation_space.shape[0] + 1)
 theta_std = np.ones_like(theta_mean) * std
 
-episode_history = deque(maxlen=100)
+episode_history = []
 for i_episode in range(MAX_EPISODES):
   # maximize function theta_rollout through cross-entropy method
   theta_sample = np.tile(theta_mean, (batch_size, 1)) + np.tile(theta_std, (batch_size, 1)) * np.random.randn(batch_size, theta_mean.size)
@@ -54,3 +56,7 @@ for i_episode in range(MAX_EPISODES):
   if mean_rewards >= 195.0:
     print("Environment {} solved after {} episodes".format(env_name, i_episode+1))
     break
+
+print(episode_history)
+plt.plot(episode_history, label="CEM reward")
+plt.show()

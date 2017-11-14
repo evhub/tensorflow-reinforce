@@ -2,6 +2,7 @@ from __future__ import print_function
 from collections import deque
 
 from rl.neural_q_learner import NeuralQLearner
+from matplotlib import pyplot as plt
 import tensorflow as tf
 import numpy as np
 import gym
@@ -37,10 +38,10 @@ q_learner = NeuralQLearner(sess,
                            num_actions,
                            summary_writer=writer)
 
-MAX_EPISODES = 10000
+MAX_EPISODES = 100
 MAX_STEPS    = 200
 
-episode_history = deque(maxlen=100)
+episode_history = []
 for i_episode in range(MAX_EPISODES):
 
   # initialize
@@ -71,3 +72,7 @@ for i_episode in range(MAX_EPISODES):
   if mean_rewards >= 195.0:
     print("Environment {} solved after {} episodes".format(env_name, i_episode+1))
     break
+
+print(episode_history)
+plt.plot(episode_history, label="DQN reward")
+plt.show()
