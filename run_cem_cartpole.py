@@ -59,4 +59,5 @@ for i_episode in range(MAX_EPISODES):
 
 print(episode_history)
 plt.plot(episode_history, label="CEM reward")
+plt.legend()
 plt.show()
